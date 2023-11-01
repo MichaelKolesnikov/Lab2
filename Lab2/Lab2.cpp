@@ -1,7 +1,6 @@
 ﻿#include <iostream>
 #include <fstream>
 #include <vector>
-#include <algorithm>
 #include <string>
 #include <chrono>
 #include "Sorts.h"
@@ -23,13 +22,29 @@ void do_records(int max_n, int step, std::initializer_list<void (*)(std::vector<
 	if (!out.is_open()) {
 		throw "failed to open file";
 	}
-	
+
 	std::vector<int> sequence;
 	sequence.reserve(max_n);
 	auto cmp = [](int a, int b) { return a - b; };
 	int time = 0;
 	for (auto sort_function : sort_functions) {
 		auto decorated = time_decorate_function(sort_function);
+		// out << name_of_function<int>(sort_function);
+		if (sort_function == Bubble<int>) {
+			out << "Bubble" << endl;
+		}
+		else if (sort_function == InsertionSort<int>) {
+			out << "InsertionSort" << endl;
+		}
+		else if (sort_function == MergeSort<int>) {
+			out << "MergeSort" << endl;
+		}
+		else if (sort_function == QuickSort<int>) {
+			out << "QuickSort" << endl;
+		}
+		else {
+			out << "Unknown function" << endl;
+		}
 		for (int n = 0; n < max_n; n += step) {
 			sequence.resize(n);
 			for (int i = 0; i < n; ++i) {
@@ -38,8 +53,8 @@ void do_records(int max_n, int step, std::initializer_list<void (*)(std::vector<
 			time = decorated(sequence, cmp);
 			out << time << ' ';
 		}
+		out << endl;
 	}
-	out << endl;
 	out.close();
 }
 
@@ -47,7 +62,7 @@ int main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(0);
 	cout.tie(0);
-
+	
 	string path_to_file = "D:\\Junk\\records.txt";
 	std::ofstream outputFile(path_to_file, std::ios::out | std::ios::trunc);
 	if (!outputFile.is_open()) {
