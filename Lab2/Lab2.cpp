@@ -29,7 +29,6 @@ void do_records(int max_n, int step, std::initializer_list<void (*)(std::vector<
 	int time = 0;
 	for (auto sort_function : sort_functions) {
 		auto decorated = time_decorate_function(sort_function);
-		// out << name_of_function<int>(sort_function);
 		if (sort_function == Bubble<int>) {
 			out << "Bubble" << endl;
 		}
