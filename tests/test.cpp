@@ -1,9 +1,10 @@
 #include "pch.h"
 #include "..//Lab2/Sorts.h"
 #include <iostream>
+#include "..//Lab2//ArraySequence.h"
 
-void test(int max_n, int step, std::initializer_list<void (*)(std::vector<int>&, std::function<int(int, int)>)> sort_functions) {
-	std::vector<int> sequence;
+void test(int max_n, int step, std::initializer_list<void (*)(ISequence<int>&, std::function<int(int, int)>)> sort_functions) {
+	ISequence<int>& sequence = *(new ArraySequence<int>());
 	sequence.reserve(max_n);
 	auto cmp = [](int a, int b) { return a - b; };
 	for (int n = 0; n < max_n; n += step) {

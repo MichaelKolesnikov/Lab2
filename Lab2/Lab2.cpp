@@ -1,8 +1,8 @@
 ﻿#include <iostream>
 #include <fstream>
-#include <vector>
 #include <string>
 #include <chrono>
+#include "ArraySequence.h"
 #include "Sorts.h"
 
 using namespace std;
@@ -17,13 +17,13 @@ auto time_decorate_function(Function&& func) {
 	};
 }
 
-void do_records(int max_n, int step, std::initializer_list<void (*)(std::vector<int>&, std::function<int(int, int)>)> sort_functions, const string& path_to_file) {
+void do_records(int max_n, int step, std::initializer_list<void (*)(ISequence<int>&, std::function<int(int, int)>)> sort_functions, const string& path_to_file) {
 	std::ofstream out(path_to_file, std::ios::app);
 	if (!out.is_open()) {
 		throw "failed to open file";
 	}
 
-	std::vector<int> sequence;
+	ISequence<int>& sequence = *(new ArraySequence<int>());
 	sequence.reserve(max_n);
 	auto cmp = [](int a, int b) { return a - b; };
 	int time = 0;

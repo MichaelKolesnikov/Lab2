@@ -1,10 +1,10 @@
 #pragma once
-#include <vector>
+#include "ISequence.h"
 #include <functional>
 #include <iostream>
 
 template <class T>
-std::pair<int, int> Partition(std::vector<T>& a, int l, int r, std::function<int(T, T)> comparator) {
+std::pair<int, int> Partition(ISequence<T>& a, int l, int r, std::function<int(T, T)> comparator) {
 	auto m1 = rand() % (r - l + 1) + l;
 	std::swap(a[l], a[m1]);
 	m1 = l;
@@ -25,7 +25,7 @@ std::pair<int, int> Partition(std::vector<T>& a, int l, int r, std::function<int
 }
 
 template <class T>
-void QuickSortSegment(std::vector<T>& a, std::function<int(T, T)> comparator, int l, int r) {
+void QuickSortSegment(ISequence<T>& a, std::function<int(T, T)> comparator, int l, int r) {
 	while (l < r) {
 		std::pair<int, int> p = Partition(a, l, r, comparator);
 		auto m1 = p.first, m2 = p.second;
@@ -41,16 +41,16 @@ void QuickSortSegment(std::vector<T>& a, std::function<int(T, T)> comparator, in
 }
 
 template <class T>
-void QuickSort(std::vector<T>& a, std::function<int(T, T)> comparator) {
-	QuickSortSegment(a, comparator, 0, a.size() - 1);
+void QuickSort(ISequence<T>& a, std::function<int(T, T)> comparator) {
+	QuickSortSegment(a, comparator, 0, a.get_length() - 1);
 }
 
 template <class T>
-void Merge(std::vector<T>& sequence, int l, int r, std::function<int(T, T)> comparator) {
+void Merge(ISequence<T>& sequence, int l, int r, std::function<int(T, T)> comparator) {
 	int i = l;
 	int m = l + (r - l) / 2;
 	int j = m;
-	std::vector<T> tmp(r - l);
+	ISequence<T>& tmp = sequence.get_sub_sequence(0, r - l);
 	int current_index = 0;
 
 	while (i < m && j < r) {
@@ -76,11 +76,13 @@ void Merge(std::vector<T>& sequence, int l, int r, std::function<int(T, T)> comp
 		++current_index;
 	}
 
-	std::copy(std::begin(tmp), std::end(tmp), std::begin(sequence) + l);
+	for (int i = l; i < r; ++i) {
+		sequence[i] = tmp[i - l];
+	}
 }
 
 template <class T>
-void MergeSortSegment(std::vector<T>& a, std::function<int(T, T)> comparator, int l, int r) {
+void MergeSortSegment(ISequence<T>& a, std::function<int(T, T)> comparator, int l, int r) {
 	if (l >= r - 1) {
 		return;
 	}
@@ -92,13 +94,13 @@ void MergeSortSegment(std::vector<T>& a, std::function<int(T, T)> comparator, in
 }
 
 template <class T>
-void MergeSort(std::vector<T>& a, std::function<int(T, T)> comparator) {
-	MergeSortSegment(a, comparator, 0, a.size());
+void MergeSort(ISequence<T>& a, std::function<int(T, T)> comparator) {
+	MergeSortSegment(a, comparator, 0, a.get_length());
 }
 
 template <class T>
-void InsertionSort(std::vector<int>& sequence, std::function<int(T, T)> comparator) {
-	int n = sequence.size();
+void InsertionSort(ISequence<T>& sequence, std::function<int(T, T)> comparator) {
+	int n = sequence.get_length();
 	for (int i = 1; i < n; ++i) {
 		int key = sequence[i];
 		int j = i - 1;
@@ -112,8 +114,8 @@ void InsertionSort(std::vector<int>& sequence, std::function<int(T, T)> comparat
 }
 
 template <class T>
-void Bubble(std::vector<T>& sequence, std::function<int(T, T)> comparator) {
-	int n = sequence.size();
+void Bubble(ISequence<T>& sequence, std::function<int(T, T)> comparator) {
+	int n = sequence.get_length();
 	for (int i = 0; i < n; ++i) {
 		for (int j = 0; j < n - i - 1; ++j) {
 			if (comparator(sequence[j], sequence[j + 1]) > 0) {

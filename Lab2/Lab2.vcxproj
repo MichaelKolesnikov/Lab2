@@ -130,6 +130,15 @@
     <ClCompile Include="Lab2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ArraySequence.h" />
+    <ClInclude Include="DynamicArray.h" />
+    <ClInclude Include="DynamicArray_realization.h" />
+    <ClInclude Include="ICollection.h" />
+    <ClInclude Include="IConstIterator.h" />
+    <ClInclude Include="IIterator.h" />
+    <ClInclude Include="IndexOutOfRange.h" />
+    <ClInclude Include="ISequence.h" />
+    <ClInclude Include="Option.h" />
     <ClInclude Include="Sorts.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
